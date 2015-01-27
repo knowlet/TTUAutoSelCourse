@@ -30,7 +30,7 @@ while [[ $(($(date "+%s")-$startTime)) -lt $runTime ]]; do
             checkSbj=$(echo $sbj | grep "^[A-Z][0-9]" | wc -l)
             if [ $checkSbj -eq 1 ]; then
                 echo "Sbj $sbj processing..."
-                result=$(curl -L -sA "$UA" --referer "$domain/selcourse/ListClassCourse.php" "$domain/selcourse/DoAddDelSbj.php?AddSbjNo=$sbj" -b ./Cookie.txt | piconv -f big5 -t utf8)
+                result=$(curl -L -sA "$UA" --referer "$domain/selcourse/ListClassCourse.php" "$domain/selcourse/DoAddDelSbj.php?AddSbjNo=$sbj" -b ./Cookie.txt | iconv -f big5 -t utf8)
                 msg=$(echo $result | grep -o "alert(.*);" | sed "s/[alert('');]//g")
                 echo $msg
             fi
