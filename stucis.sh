@@ -34,7 +34,7 @@ while [[ $(($(date "+%s")-$startTime)) -lt $runTime ]]; do
                 msg=$(echo $result | grep -o "alert(.*);" | sed "s/[alert('');]//g")
                 echo $msg
             fi
-        done < sbj
+        done < sbj.txt
         echo "done, wait 3 sec.."
         sleep 3
     else
