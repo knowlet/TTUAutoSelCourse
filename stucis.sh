@@ -1,6 +1,6 @@
 source config.sh
+test -f sbj.txt && echo "sbjFile Found" || (echo "File Not Found" && exit 1)
 source countdown.sh
-test -f sbj && echo "sbjFile Found" || (echo "File Not Found" && exit 1)
 
 function login()
 {
@@ -19,16 +19,16 @@ else
     startTime=$(date -d "$TIME" "+%s")
 fi
 countdown $startTime
-# run 5 mins
-runTime=$((60 * 5))
+# run 2 mins
+runTime=$((60 * 2))
 while [[ $(($(date "+%s")-$startTime)) -lt $runTime ]]; do
     login
     curl -sA "$UA" "$domain/menu/seltop.php" -b ./Cookie.txt > /dev/null
     selDeny=$(curl -sA "$UA" "$domain/selcourse/ListClassCourse.php" -b ./Cookie.txt | grep 'DoAddDelSbj' | wc -l)
     if [ $selDeny -ge 1 ]; then
         while read sbj; do
-            checkSbj=$(echo $sbj | grep "^[A-Z][0-9]" | wc -l)
-            if [ $checkSbj -eq 1 ]; then
+            sbj=$(echo $sbj | grep -o "^[A-Z]\w\+")
+            if [[ $sbj =~ ^[A-Z] ]]; then
                 echo "Sbj $sbj processing..."
                 result=$(curl -L -sA "$UA" --referer "$domain/selcourse/ListClassCourse.php" "$domain/selcourse/DoAddDelSbj.php?AddSbjNo=$sbj" -b ./Cookie.txt | iconv -f big5 -t utf8)
                 msg=$(echo $result | grep -o "alert(.*);" | sed "s/[alert('');]//g")
@@ -38,7 +38,7 @@ while [[ $(($(date "+%s")-$startTime)) -lt $runTime ]]; do
         echo "done, wait 3 sec.."
         sleep 3
     else
-        echo "Select Deny, wait 30 sec."
-        sleep 30
+        echo "Select Deny, wait 15 sec."
+        sleep 15
     fi
 done
