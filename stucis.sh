@@ -1,17 +1,7 @@
 source config.sh
 test -f sbj.txt && echo "sbjFile Found" || (echo "File Not Found" && exit 1)
 source countdown.sh
-
-function login()
-{
-    loginResult=$(curl -sA "$UA" -d $loginParams $loginUrl -c ./Cookie.txt | grep 'stumain.php' | wc -l)
-    if [ $loginResult -eq 1 ]; then
-        echo "User $ID Login Success!!!";
-    else
-        echo "Something wrong! \nPlease check your password?"
-        exit 1
-    fi
-}
+source login.sh
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     startTime=$(gdate -d "$TIME" "+%s")
