@@ -8,7 +8,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
     startTime=$(date -d "$TIME" "+%s")
 fi
-countdown $startTime
+countdown $(($startTime-15))
 # run 2 mins
 runTime=$((60 * 2))
 while [[ $(($(date "+%s")-$startTime)) -lt $runTime ]]; do
@@ -30,7 +30,7 @@ while [[ $(($(date "+%s")-$startTime)) -lt $runTime ]]; do
         if [ $chose -eq $count ]; then echo "All done."; exit 0; fi
         sleep 3
     else
-        echo "Select Deny, wait 15 sec."
-        sleep 15
+        echo "Select Deny, wait a sec."
+        sleep 1
     fi
 done

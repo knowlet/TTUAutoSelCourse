@@ -1,14 +1,7 @@
 source config.sh
 test -f sbj.txt && echo "sbjFile Found" || (echo "File Not Found" && exit 1)
-source countdown.sh
 source login.sh
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    startTime=$(gdate -d "$TIME" "+%s")
-else
-    startTime=$(date -d "$TIME" "+%s")
-fi
-countdown $startTime
 while true; do
     login
     curl -sA "$UA" "$domain/menu/seltop.php" -b ./Cookie.txt > /dev/null
