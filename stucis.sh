@@ -11,9 +11,9 @@ fi
 countdown $(($startTime-15))
 # run 2 mins
 runTime=$((60 * 2))
+login
 while [[ $(($(date "+%s")-$startTime)) -lt $runTime ]]; do
-    login
-    curl -sA "$UA" "$domain/menu/seltop.php" -b ./Cookie.txt > /dev/null
+    curl -sA "$UA" "$domain/menu/seltop.php" -b ./Cookie.txt -c ./Cookie.txt > /dev/null
     selDeny=$(curl -sA "$UA" "$domain/selcourse/ListClassCourse.php" -b ./Cookie.txt | grep 'DoAddDelSbj' | wc -l)
     if [ $selDeny -ge 1 ]; then
         count=0; chose=0;

@@ -2,10 +2,10 @@ source config.sh
 test -f sbj.txt && echo "sbjFile Found" || (echo "File Not Found" && exit 1)
 source login.sh
 
+login
 while true; do
-    login
     curl -sA "$UA" "$domain/menu/seltop.php" -b ./Cookie.txt > /dev/null
-    selDeny=$(curl -sA "$UA" "$domain/selcourse/ListClassCourse.php" -b ./Cookie.txt | grep 'DoAddDelSbj' | wc -l)
+    selDeny=$(curl -sA "$UA" "$domain/selcourse/ListClassCourse.php" -b ./Cookie.txt -c ./Cookie.txt | grep 'DoAddDelSbj' | wc -l)
     if [ $selDeny -ge 1 ]; then
         while read sbj; do
             if [[ $sbj =~ ^[A-Z][0-9A-Z]{4,5} ]]; then
