@@ -1,6 +1,6 @@
 function login()
 {
-    loginResult=$(curl -sA "$UA" -d $loginParams $loginUrl -c ./Cookie.txt | grep 'stumain.php' | wc -l)
+    loginResult=$(curl -skA "$UA" -d $loginParams $loginUrl -c ./Cookie.txt | grep 'stumain.php' | wc -l)
     if [ $loginResult -eq 1 ]; then
         echo "User $ID Login Success!!!";
     else

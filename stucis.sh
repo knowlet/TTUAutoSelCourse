@@ -13,14 +13,14 @@ countdown $(($startTime-15))
 runTime=$((60 * 2))
 login
 while [[ $(($(date "+%s")-$startTime)) -lt $runTime ]]; do
-    curl -sA "$UA" "$domain/menu/seltop.php" -b ./Cookie.txt -c ./Cookie.txt > /dev/null
-    selDeny=$(curl -sA "$UA" "$domain/selcourse/ListClassCourse.php" -b ./Cookie.txt | grep 'DoAddDelSbj' | wc -l)
+    curl -skA "$UA" "$domain/menu/seltop.php" -b ./Cookie.txt -c ./Cookie.txt > /dev/null
+    selDeny=$(curl -skA "$UA" "$domain/selcourse/ListClassCourse.php" -b ./Cookie.txt | grep 'DoAddDelSbj' | wc -l)
     if [ $selDeny -ge 1 ]; then
         count=0; chose=0;
         while read sbj; do
             if [[ $sbj =~ ^[A-Z][0-9A-Z]{4,5} ]]; then
                 echo "Sbj ${BASH_REMATCH[0]} processing..."
-                result=$(curl -L -sA "$UA" --referer "$domain/selcourse/ListClassCourse.php" "$domain/selcourse/DoAddDelSbj.php?AddSbjNo=${BASH_REMATCH[0]}" -b ./Cookie.txt | iconv -f big5 -t utf8)
+                result=$(curl -L -skA "$UA" --referer "$domain/selcourse/ListClassCourse.php" "$domain/selcourse/DoAddDelSbj.php?AddSbjNo=${BASH_REMATCH[0]}" -b ./Cookie.txt | iconv -f big5 -t utf8)
                 msg=$(echo $result | grep -o "alert(.*);" | sed "s/[alert('');]//g")
                 echo $msg
                 if [ -n $msg ]; then ((chose++)); fi
