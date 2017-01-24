@@ -1,7 +1,18 @@
-source config.sh
+# source config.sh
 test -f sbj.txt && echo "sbjFile Found" || (echo "File Not Found" && exit 1)
 source countdown.sh
-source login.sh
+# source login.sh
+source test.sh
+
+function isLogin()
+{
+    if [ `echo $1 | grep "Not login or session expire!" | wc -l` -eq 1 ]; then
+        echo "Not login or session expire!";
+        login
+    else
+        echo "Login Checked."
+    fi
+}
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     startTime=$(gdate -d "$TIME" "+%s")
@@ -14,7 +25,9 @@ runTime=$((60 * 2))
 login
 while [[ $(($(date "+%s")-$startTime)) -lt $runTime ]]; do
     curl -skA "$UA" "$domain/menu/seltop.php" -b ./Cookie.txt -c ./Cookie.txt > /dev/null
-    selDeny=$(curl -skA "$UA" "$domain/selcourse/ListClassCourse.php" -b ./Cookie.txt | grep 'DoAddDelSbj' | wc -l)
+    result=`curl -skA "$UA" "$domain/selcourse/ListClassCourse.php" -b ./Cookie.txt`
+    isLogin "$result"
+    selDeny=`echo $result | grep 'DoAddDelSbj' | wc -l`
     if [ $selDeny -ge 1 ]; then
         count=0; chose=0;
         while read sbj; do
@@ -25,6 +38,7 @@ while [[ $(($(date "+%s")-$startTime)) -lt $runTime ]]; do
                 echo $msg
                 if [ -n $msg ]; then ((chose++)); fi
                 ((count++))
+                isLogin "$result"
             fi
         done < sbj.txt
         if [ $chose -eq $count ]; then echo "All done."; exit 0; fi
